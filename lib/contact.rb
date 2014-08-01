@@ -16,6 +16,16 @@ class Contact
   def initialize(name)
     @name = name
     @phone_numbers = []
+    @addresses = []
+    @emails = []
+  end
+
+  def add_email_address(address)
+    @emails << address
+  end
+
+  def emails
+    @emails
   end
 
   def add_phone_number(phone)
@@ -24,6 +34,14 @@ class Contact
 
   def phone_numbers
     @phone_numbers
+  end
+
+  def add_address(address)
+    @addresses << address
+  end
+
+  def addresses
+    @addresses
   end
 
   def set_address(address)

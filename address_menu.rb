@@ -36,17 +36,16 @@ end
 def display_contact
   system("clear")
   puts "[== Current Contact List ==]"
-  display_with_index(Contact.all)
+  display_with_index(Contact.all, "name")
   puts "Choose contact: "
   contact_choice = gets.chomp.to_i
   @current_contact = (Contact.all[contact_choice - 1])
   contact_menu
 end
 
-def display_with_index(object_type)
-  object_type.each_with_index do |item, index|
-  # Contact.all.each_with_index do |item, index|
-    puts "[#{(index+1).to_s}] #{item.name}"
+def display_with_index(collection, property)
+  collection.each_with_index do |item, index|
+    puts "[#{(index+1).to_s}] #{item.send(property)}"
   end
 end
 
@@ -80,6 +79,69 @@ def contact_menu
     end
   end
 end
+
+def phone_menu
+  loop do
+    puts "[== Phone Options ==]"
+    puts "[a] add phone number with type"
+    puts "[l] list phone numbers"
+    puts "[u] update phone numbers"
+    puts "[x] exit"
+    puts "\n"
+    menu_choice = gets.chomp
+    if menu_choice == "a"
+      phone_menu_add
+    elsif menu_choice == "l"
+      phone_menu_list
+    elsif menu_choice == "u"
+      phone_menu_update
+    elsif menu_choice == "x"
+      main_menu
+    else
+      puts "Not a valid choice."
+    end
+  end
+end
+
+def phone_menu_add
+  puts "Enter the Phone Number"
+  phone_num = gets.chomp
+  puts "What type of phone number? (Home, Cell, Work)"
+  phone_typ = gets.chomp
+  current_phone = Phone.new(phone_num, phone_typ)
+  @current_contact.add_phone_number(current_phone)
+  system("clear")
+  puts "[== Phone numbers ==]"
+  display_with_index(@current_contact.phone_numbers, "number")
+  puts "\n\n"
+end
+
+def phone_menu_list
+  system("clear")
+  puts "[== Phone numbers ==]"
+  @current_contact.phone_numbers.each_with_index do |item, index|
+    puts "[#{(index+1).to_s}] #{item.number} #{item.type}"
+  end
+  puts "\n\n"
+end
+
+def phone_menu_update
+  phone_menu_list
+  puts "Choose the phone number you wish to update\n"
+  phone_choice = gets.chomp.to_i
+  current_phone = @current_contact.phone_numbers[phone_choice - 1]
+  puts "The phone number you wish to update: #{current_phone.number}\n"
+  puts "Enter the new number: "
+  phone_num = gets.chomp
+  puts "What type of phone number? (Home, Cell, Work)"
+  phone_typ = gets.chomp
+  # current_phone.map {|number| number = phone_num}
+  current_phone.update_number(phone_num)
+  current_phone.update_type(phone_typ)
+  phone_menu_list
+end
+
+
 def address_menu
   puts "[==Address Options==]"
   puts "[a] add address with type"
@@ -99,8 +161,6 @@ def address_menu
     else
       puts "Not a valid choice."
     end
-
-
 end
 
 def email_menu
@@ -122,55 +182,7 @@ def email_menu
     else
       puts "Not a valid choice."
     end
-
-
 end
-
-def phone_menu
-  loop do
-    # system("clear")
-    #display_with_index(Phone.all)
-    puts "[== Phone Options ==]"
-    puts "[a] add phone number with type"
-    puts "[l] list phone numbers"
-    puts "[u] update phone numbers"
-    puts "[x] exit"
-    puts "\n"
-    menu_choice = gets.chomp
-    if menu_choice == "a"
-      phone_menu_add
-    elsif menu_choice == "l"
-
-    elsif menu_choice == "u"
-
-    elsif menu_choice == "x"
-      main_menu
-    else
-      puts "Not a valid choice."
-    end
-  end
-end
-
-def phone_menu_add
-  puts "Enter the Phone Number"
-  phone_num = gets.chomp
-  puts "What type of phone number? (Home, Cell, Work)"
-  phone_typ = gets.chomp
-  current_phone = Phone.new(phone_num, phone_typ)
-  @current_contact.add_phone_number(current_phone)
-  puts "Phone numbers"
-  #display_with_index(@current_contact.phone_numbers[])
-  @current_contact.phone_numbers.each_with_index do |item, index|
-    puts "[#{(index+1).to_s}] #{item.number} #{item.type}"
-  end
-
-end
-
-
-
-
-
-
 
 
 main_menu

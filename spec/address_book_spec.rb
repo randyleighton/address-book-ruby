@@ -64,15 +64,23 @@ describe 'Phone' do
     expect(test_phone.type).to eq 'Home'
   end
 
+  it 'updates the phone number and type' do
+    test_phone = Phone.new('503-522-8552', 'Home')
+    test_phone.update_number('503-225-2558')
+    test_phone.update_type('Cell')
+    expect(test_phone.number).to eq '503-225-2558'
+    expect(test_phone.type).to eq 'Cell'
+  end
+
 end
 
-describe 'Addresses' do
+describe 'Address' do
   it "does something really fun" do
     test_contact = Contact.new("Chucky Redrum")
   end
 end
 
-describe 'Emails' do
+describe 'Email' do
   it "does something amazingly fun" do
     test_contact = Contact.new("Chucky Redrum")
   end
